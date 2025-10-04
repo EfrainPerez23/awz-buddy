@@ -1,4 +1,4 @@
-// package s3 is a package for s3 operations
+// Package s3 is a package for s3 operations
 package s3
 
 import (

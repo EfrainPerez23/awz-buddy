@@ -14,6 +14,8 @@ var rootCmd = &cobra.Command{
 	Long:  `AWZ Buddy allows you to detect unused or misconfigured resources, prevent cost leaks, and keep your AWS environment clean and secure`,
 }
 
+// Execute runs the root command and prints any errors to the console.
+// If an error occurs, the program will exit with a status code of 1.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

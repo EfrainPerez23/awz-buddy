@@ -9,7 +9,7 @@ import (
 
 var s3Cmd = &cobra.Command{
 	Use:   "s3",
-	Short: "Comandos para S3",
+	Short: "s3 commands",
 }
 
 var emptyCmd = &cobra.Command{
