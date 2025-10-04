@@ -8,59 +8,58 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: 1.25.1
-
       - name: Install dependencies
         run: |
           go mod tidy
           go mod download
-
       - name: Build binaries
         run: make
-      - name: Create GitHub Release
-        id: release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          generateReleaseNotes: true
 
+  release-assets:
+    needs: build
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
       - name: Upload Linux binary
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: outputs/awz-buddy-linux-amd64
           asset_name: awz-buddy-linux-amd64
           asset_content_type: application/octet-stream
-
       - name: Upload Darwin amd binary
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: outputs/awz-buddy-darwin-amd64
           asset_name: awz-buddy-darwin-amd64
           asset_content_type: application/octet-stream
-
       - name: Upload Darwin arm binary
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: outputs/awz-buddy-darwin-arm64
           asset_name: awz-buddy-darwin-arm64
           asset_content_type: application/octet-stream
-
       - name: Upload Windows binary
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: outputs/awz-buddy-windows-amd64.exe
           asset_name: awz-buddy-windows-amd64.exe
           asset_content_type: application/octet-stream
