@@ -1,3 +1,4 @@
+// Package cmd is a package for the root command
 package cmd
 
 import (
@@ -14,7 +15,7 @@ var s3Cmd = &cobra.Command{
 var emptyCmd = &cobra.Command{
 	Use:   "empty",
 	Short: "Show a list of empty buckets",
-	Run: func(_ *cobra.Command, args []string) {
+	Run: func(_ *cobra.Command, _ []string) {
 		s3Buddy.CheckEmpytBuckets()
 	},
 }

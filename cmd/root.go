@@ -1,5 +1,4 @@
 // Package cmd is a package for the root command
-
 package cmd
 
 import (
