@@ -1,5 +1,5 @@
-// package s3 is a package for s3 operations
-package main
+// Package s3 is a package for s3 operations
+package s3
 
 import (
 	"context"
@@ -31,7 +31,9 @@ func isBucketEmpty(bucketName string) bool {
 	return len(output.Contents) == 0
 }
 
-func main() {
+// CheckEmpytBuckets lists all the buckets in your AWS account and checks if they are empty.
+// It renders a table with the bucket name and a symbol indicating if the bucket is empty or not.
+func CheckEmpytBuckets() {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
 		panic(fmt.Sprintf("unable to load SDK config, %v", err))
