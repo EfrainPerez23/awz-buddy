@@ -54,7 +54,9 @@ func main() {
 			empty = "✅"
 		}
 
-		table.Append([]string{bucketName, empty})
+		if err := table.Append([]string{bucketName, empty}); err != nil {
+			panic(fmt.Sprintf("Error appending to table: %v", err))
+		}
 	}
 	if err := table.Render(); err != nil {
 		panic(fmt.Sprintf("Error rendering table: %v", err))
