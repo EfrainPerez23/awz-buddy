@@ -1,3 +1,4 @@
+// package s3 is a package for s3 operations
 package main
 
 import (
@@ -53,7 +54,11 @@ func main() {
 			empty = "✅"
 		}
 
-		table.Append([]string{bucketName, empty})
+		if err := table.Append([]string{bucketName, empty}); err != nil {
+			panic(fmt.Sprintf("Error appending to table: %v", err))
+		}
 	}
-	table.Render()
+	if err := table.Render(); err != nil {
+		panic(fmt.Sprintf("Error rendering table: %v", err))
+	}
 }
