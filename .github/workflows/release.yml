@@ -11,30 +11,45 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: 1.25.1
+
       - name: Install dependencies
         run: |
           go mod tidy
           go mod download
+
       - name: Build binaries
         run: make
 
-  release-assets:
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: binaries
+          path: outputs/*
+
+  release:
     needs: build
-    name: Create Release
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: binaries
+          path: outputs
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+
       - name: Upload Linux binary
         uses: actions/upload-release-asset@v1
         with:
@@ -42,6 +57,7 @@ jobs:
           asset_path: outputs/awz-buddy-linux-amd64
           asset_name: awz-buddy-linux-amd64
           asset_content_type: application/octet-stream
+
       - name: Upload Darwin amd binary
         uses: actions/upload-release-asset@v1
         with:
@@ -49,6 +65,7 @@ jobs:
           asset_path: outputs/awz-buddy-darwin-amd64
           asset_name: awz-buddy-darwin-amd64
           asset_content_type: application/octet-stream
+
       - name: Upload Darwin arm binary
         uses: actions/upload-release-asset@v1
         with:
@@ -56,6 +73,7 @@ jobs:
           asset_path: outputs/awz-buddy-darwin-arm64
           asset_name: awz-buddy-darwin-arm64
           asset_content_type: application/octet-stream
+
       - name: Upload Windows binary
         uses: actions/upload-release-asset@v1
         with:
