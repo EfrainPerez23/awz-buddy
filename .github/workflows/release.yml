@@ -25,18 +25,6 @@ jobs:
 
       - name: Build binaries
         run: make
-
-      - name: Create GitHub Release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          files: |
-            outputs/awz-buddy-linux-amd64
-            outputs/awz-buddy-windows-amd64.exe
-            outputs/awz-buddy-darwin-amd64
-            outputs/awz-buddy-darwin-arm64
-
       - name: Create GitHub Release
         id: release
         uses: ncipollo/release-action@v1
