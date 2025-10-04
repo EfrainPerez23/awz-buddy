@@ -29,7 +29,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: binaries
-          path: outputs/*
+          path: dist/*
 
   release:
     needs: build
@@ -39,7 +39,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: binaries
-          path: outputs
+          path: dist
 
       - name: Create Release
         id: create_release
@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: outputs/awz-buddy-linux-amd64
+          asset_path: dist/awz-buddy-linux-amd64
           asset_name: awz-buddy-linux-amd64
           asset_content_type: application/octet-stream
 
@@ -62,7 +62,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: outputs/awz-buddy-darwin-amd64
+          asset_path: dist/awz-buddy-darwin-amd64
           asset_name: awz-buddy-darwin-amd64
           asset_content_type: application/octet-stream
 
@@ -70,7 +70,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: outputs/awz-buddy-darwin-arm64
+          asset_path: dist/awz-buddy-darwin-arm64
           asset_name: awz-buddy-darwin-arm64
           asset_content_type: application/octet-stream
 
@@ -78,6 +78,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: outputs/awz-buddy-windows-amd64.exe
+          asset_path: dist/awz-buddy-windows-amd64.exe
           asset_name: awz-buddy-windows-amd64.exe
           asset_content_type: application/octet-stream
