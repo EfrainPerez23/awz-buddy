@@ -31,7 +31,6 @@ jobs:
         with:
           tag: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          generateReleaseNotes: true
           files: |
             outputs/awz-buddy-linux-amd64
             outputs/awz-buddy-windows-amd64.exe
