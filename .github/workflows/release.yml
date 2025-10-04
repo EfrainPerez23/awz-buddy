@@ -23,7 +23,7 @@ jobs:
           go mod tidy
           go mod download
 
-      - name: Build binary
+      - name: Build binaries
         run: make
 
       - name: Create GitHub Release
@@ -36,3 +36,43 @@ jobs:
             outputs/awz-buddy-windows-amd64.exe
             outputs/awz-buddy-darwin-amd64
             outputs/awz-buddy-darwin-arm64
+
+      - name: Create GitHub Release
+        id: release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          generateReleaseNotes: true
+
+      - name: Upload Linux binary
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: outputs/awz-buddy-linux-amd64
+          asset_name: awz-buddy-linux-amd64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Darwin amd binary
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: outputs/awz-buddy-darwin-amd64
+          asset_name: awz-buddy-darwin-amd64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Darwin arm binary
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: outputs/awz-buddy-darwin-arm64
+          asset_name: awz-buddy-darwin-arm64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Windows binary
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: outputs/awz-buddy-windows-amd64.exe
+          asset_name: awz-buddy-windows-amd64.exe
+          asset_content_type: application/octet-stream
