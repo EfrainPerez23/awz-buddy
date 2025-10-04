@@ -1,2 +1,0 @@
-// Package utils
-package pkg
