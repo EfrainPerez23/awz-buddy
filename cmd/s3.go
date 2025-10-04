@@ -14,7 +14,7 @@ var s3Cmd = &cobra.Command{
 var emptyCmd = &cobra.Command{
 	Use:   "empty",
 	Short: "Show a list of empty buckets",
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(_ *cobra.Command, args []string) {
 		s3Buddy.CheckEmpytBuckets()
 	},
 }

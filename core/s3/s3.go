@@ -31,6 +31,8 @@ func isBucketEmpty(bucketName string) bool {
 	return len(output.Contents) == 0
 }
 
+// CheckEmpytBuckets lists all the buckets in your AWS account and checks if they are empty.
+// It renders a table with the bucket name and a symbol indicating if the bucket is empty or not.
 func CheckEmpytBuckets() {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
