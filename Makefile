@@ -1,5 +1,3 @@
-# Makefile para awz-buddy
-# ----------------------------------------
 # Variables
 BINARY_NAME := awz-buddy
 OUTPUT_DIR := dist
@@ -32,33 +30,44 @@ RESET := \033[0m
 .PHONY: all
 all: build
 
-$(OUTPUT_DIR):
-	$(SILENT)mkdir -p $(OUTPUT_DIR)
+# ----------------------------------------
+.PHONY: prepare
+prepare:
+	@if [ -d $(OUTPUT_DIR) ]; then \
+		rm -rf $(OUTPUT_DIR); \
+		echo "$(CYAN)Folder $(OUTPUT_DIR) cleaned$(RESET)"; \
+	fi
+	@mkdir -p $(OUTPUT_DIR)
 
+# ----------------------------------------
+# Build
 .PHONY: build
-build: $(OUTPUT_DIR) $(BINARIES)
-	$(SILENT)echo "Build completed in $(OUTPUT_DIR)/"
+build: prepare $(BINARIES)
+	$(SILENT)echo "$(GREEN)Builds completed in $(OUTPUT_DIR) $(RESET)"
 
+# ----------------------------------------
 # Linux AMD64
-$(OUTPUT_DIR)/$(BINARY_NAME)-linux-amd64: main.go
+$(OUTPUT_DIR)/$(BINARY_NAME)-linux-amd64: $(OUTPUT_DIR) main.go
 	$(SILENT)GOOS=$(LINUX) GOARCH=$(AMD64) $(GO) build -o $@ main.go
 
 # Windows AMD64
-$(OUTPUT_DIR)/$(BINARY_NAME)-windows-amd64.exe: main.go
+$(OUTPUT_DIR)/$(BINARY_NAME)-windows-amd64.exe: $(OUTPUT_DIR) main.go
 	$(SILENT)GOOS=$(WINDOWS) GOARCH=$(AMD64) $(GO) build -o $@ main.go
 
 # macOS Intel AMD64
-$(OUTPUT_DIR)/$(BINARY_NAME)-darwin-amd64: main.go
+$(OUTPUT_DIR)/$(BINARY_NAME)-darwin-amd64: $(OUTPUT_DIR) main.go
 	$(SILENT)GOOS=$(DARWIN) GOARCH=$(AMD64) $(GO) build -o $@ main.go
 
 # macOS ARM64 (Apple Silicon)
-$(OUTPUT_DIR)/$(BINARY_NAME)-darwin-arm64: main.go
+$(OUTPUT_DIR)/$(BINARY_NAME)-darwin-arm64: $(OUTPUT_DIR) main.go
 	$(SILENT)GOOS=$(DARWIN) GOARCH=$(ARM64) $(GO) build -o $@ main.go
 
+# ----------------------------------------
+# Clean
 .PHONY: clean
 clean:
 	$(SILENT)rm -rf $(OUTPUT_DIR)
-	$(SILENT)echo "Carpeta $(OUTPUT_DIR) eliminada."
+	$(SILENT)echo "$(CYAN)Folder $(OUTPUT_DIR) deleted$(RESET)"
 
 # ----------------------------------------
 # Nix environment
@@ -72,10 +81,10 @@ develop:
 	fi
 	@echo "$(GREEN)✅✅ Nix detected ✅✅$(RESET)"
 	@if [ -f flake.nix ]; then \
-		echo "$(CYAN)⚗️ ⚗️ Openning environment with flake.nix ⚗️ ⚗️$(RESET)"; \
+		echo "$(CYAN)⚗️ ⚗️ Opening environment with flake.nix ⚗️ ⚗️$(RESET)"; \
 		nix develop; \
 	elif [ -f shell.nix ]; then \
-		echo "$(CYAN)⚗️ ⚗️ Openning environment with  shell.nix ⚗️ ⚗️$(RESET)"; \
+		echo "$(CYAN)⚗️ ⚗️ Opening environment with shell.nix ⚗️ ⚗️$(RESET)"; \
 		nix-shell; \
 	else \
 		echo "$(RED)❌❌ flake.nix or shell.nix not found ❌❌$(RESET)"; \
