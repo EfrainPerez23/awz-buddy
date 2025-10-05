@@ -35,8 +35,6 @@ func InitS3Client() {
 // Returns true if the bucket is empty, false otherwise.
 func IsBucketEmpty(bucketName string) bool {
 
-	InitS3Client()
-
 	if bucketName == "" {
 		panic("Bucket name is empty")
 	}
@@ -55,11 +53,23 @@ func IsBucketEmpty(bucketName string) bool {
 // It panics if there is an error listing the buckets.
 func GetAllS3SBuckets() *s3.ListBucketsOutput {
 
-	InitS3Client()
 	allBuckets, err := S3Client.ListBuckets(context.TODO(), &s3.ListBucketsInput{})
 	if err != nil {
 		panic(fmt.Sprintf("Error listing buckets: %v", err))
 	}
 
 	return allBuckets
+}
+
+func CheckPublicPoliciesForBuckets(bucketName string) *s3.GetPublicAccessBlockOutput {
+
+	accessBlock, err := S3Client.GetPublicAccessBlock(context.TODO(), &s3.GetPublicAccessBlockInput{
+		Bucket: &bucketName,
+	})
+
+	if err != nil {
+		panic(fmt.Sprintf("Error getting bucket policy status for bucket %s: %v", bucketName, err))
+	}
+
+	return accessBlock
 }
