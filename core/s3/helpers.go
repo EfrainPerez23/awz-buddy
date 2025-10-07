@@ -6,8 +6,9 @@ import (
 	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+
+	CORE "awz-buddy/core"
 )
 
 var S3Client *s3.Client
@@ -20,12 +21,8 @@ func InitS3Client() {
 		return
 	}
 
-	cfg, err := config.LoadDefaultConfig(context.TODO())
-	if err != nil {
-		panic(fmt.Sprintf("Unable to load SDK config, %v", err))
-	}
+	cfg := CORE.InitAWSClient()
 
-	// Create a new S3 client from the loaded config
 	S3Client = s3.NewFromConfig(cfg)
 }
 
